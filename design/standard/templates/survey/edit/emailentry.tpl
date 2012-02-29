@@ -12,6 +12,12 @@
 </div>
 
 <div class="block">
+<input type="hidden" name="{$prefix_attribute}_ezsurvey_question_{$question.id}_num_hidden_{$attribute_id}" value="1" />
+<label><input type="checkbox" name="{$prefix_attribute}_ezsurvey_question_{$question.id}_num_{$attribute_id}" value="1" {section show=$question.num}checked{/section}/>
+{"Unique answer"|i18n('survey')}</label>
+</div>
+
+<div class="block">
 <label>{"Default settings"|i18n('survey')}:</label><div class="labelbreak"></div>
 <select name="{$prefix_attribute}_ezsurvey_question_{$question.id}_text3_{$attribute_id}">
 <option value="" {section show=$question.text3|eq('')} selected="selected"{/section}>{"Default answer"|i18n('survey')}</option>

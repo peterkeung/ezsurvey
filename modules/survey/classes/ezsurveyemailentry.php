@@ -73,10 +73,51 @@ class eZSurveyEmailEntry extends eZSurveyEntry
                                              'code' => 'email_email_not_valid',
                                              'question' => $this );
         }
+        // Force the e-mail to be unique among responses
+        else if ( $this->attribute( 'num' ) == 1 )
+        {
+            $existingEmail = eZPersistentObject::fetchObject( eZSurveyQuestionResult::definition(),
+                                                              null,
+                                                              array( 'questionoriginal_id' => $this->attribute( 'original_id' ),
+                                                              'text' => $answer ) );
+
+            if( $existingEmail )
+            {
+                $validation['error'] = true;
+                $validation['errors'][] = array( 'message' => ezpI18n::tr( 'survey', 'The email address in question %number has already been entered!', null,
+                                                                      array( '%number' => $this->questionNumber() ) ),
+                                                 'question_number' => $this->questionNumber(),
+                                                 'code' => 'email_email_not_unique',
+                                                 'question' => $this );
+            }
+        }
 
         $this->setAnswer( $answer );
     }
 
+    function processEditActions( &$validation, $params )
+    {
+        parent::processEditActions( $validation, $params );
+
+        $http = eZHTTPTool::instance();
+
+        $prefix = eZSurveyType::PREFIX_ATTRIBUTE;
+        $attributeID = $params['contentobjectattribute_id'];
+
+        $postQuestionUniqueHidden = $prefix . '_ezsurvey_question_' . $this->ID . '_num_hidden_' . $attributeID;
+        if ( $http->hasPostVariable( $postQuestionUniqueHidden ) )
+        {
+            $postQuestionUnique = $prefix . '_ezsurvey_question_' . $this->ID . '_num_' . $attributeID;
+            if ( $http->hasPostVariable( $postQuestionUnique ) )
+                $newUnique = 1;
+            else
+                $newUnique = 0;
+
+            if ( $newUnique != $this->attribute( 'num' ) )
+                $this->setAttribute( 'num', $newUnique );
+        }
+    }
+    
     function answer()
     {
         if ( $this->Answer !== false )
