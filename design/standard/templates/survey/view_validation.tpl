@@ -1,4 +1,4 @@
-{section show=and( is_set( $survey_validation ), or( $survey_validation.error, $survey_validation.warning ))}
+{if and( is_set( $survey_validation ), or( is_set( $survey_validation.error ), is_set( $survey_validation.warning ) ) )}
 <div class="message-warning">
 <h2>{"Warning"|i18n( 'survey' )}</h2>
 <ul>
@@ -15,4 +15,4 @@
 </ul>
 </div>
 <br/ >
-{/section}
+{/if}
