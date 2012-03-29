@@ -483,12 +483,19 @@ class eZSurveyResult extends eZPersistentObject
         if ( $showHeadlineUserName === true )
         {
             $indexList[] = 'user_id';
-            $questions['user_id'] = $surveyINI->variable( 'CSVExportSettings', 'HeadlineUserName' );
+            $questions['user_id'] = ezpI18n::tr( 'survey', $surveyINI->variable( 'CSVExportSettings', 'HeadlineUserName' ) );
+        }
+        $showTimestamp = $surveyINI->variable( 'CSVExportSettings', 'ShowTimestamp' ) == 'true' ? true: false;
+        if ( $showTimestamp === true )
+        {
+            $indexList[] = 'tstamp';
+            $questions['tstamp'] = ezpI18n::tr( 'survey', $surveyINI->variable( 'CSVExportSettings', 'HeadlineTimestamp' ) );
+            $locale = eZLocale::instance();
         }
         $surveyString = printLine( $indexList, $questions );
 
         $db = eZDB::instance();
-        $query = "SELECT ezsurveyquestionresult.result_id as result_id, question_id, questionoriginal_id, text, ezsurveyresult.user_id as user_id
+        $query = "SELECT ezsurveyquestionresult.result_id as result_id, question_id, questionoriginal_id, text, ezsurveyresult.tstamp as tstamp, ezsurveyresult.user_id as user_id
                                   FROM ezsurveyquestionresult, ezsurveyresult, ezsurvey
                                   WHERE ezsurveyresult.id=ezsurveyquestionresult.result_id AND
                                         ezsurveyresult.survey_id=ezsurvey.id AND
@@ -546,6 +553,11 @@ class eZSurveyResult extends eZPersistentObject
                  $showHeadlineUserName === true )
             {
                 $answers['user_id'] = $row['user_id'];
+            }
+            if ( !isset( $answers['tstamp'] ) and
+                 $showTimestamp === true )
+            {
+                $answers['tstamp'] = $locale->formatDateTime( $row['tstamp'] );
             }
         }
         if ( $oldID !== false )

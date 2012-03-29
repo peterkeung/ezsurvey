@@ -39,6 +39,8 @@ PackageFileName=ezsurvey_2.0-1.0-1.ezpkg
 
 [CSVExportSettings]
 HeadlineUserName=Answer from
+HeadlineTimestamp=Timestamp
 ShowUserName=true
+ShowTimestamp=true
 
 */ ?>
