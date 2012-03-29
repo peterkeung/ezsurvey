@@ -169,7 +169,7 @@ class eZSurvey extends eZPersistentObject
         $accessList = 1;
 
         $accessResult = $user->hasAccessTo( 'survey', 'administration' );
-        $result = ( $accessResult['accessWord'] == 'yes' and $this->Persistent == 1 );
+        $result = ( $accessResult['accessWord'] == 'yes' );
 
         return $result;
     }
