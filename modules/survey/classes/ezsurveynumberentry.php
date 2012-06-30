@@ -417,6 +417,22 @@ class eZSurveyNumberEntry extends eZSurveyEntry
             }
         }
     }
+    function fetchAverage( $originalQuestionID = 0, $round = false )
+    {
+        $db = eZDB::instance();
+        $query = "SELECT AVG( text ) as average from ezsurveyquestionresult where questionoriginal_id=$originalQuestionID";
+        $rows = $db->arrayQuery( $query );
+        
+        if( $round === false )
+        {
+            $average = $rows[0]['average'];
+        }
+        else
+        {
+            $average = number_format( $rows[0]['average'], $round );
+        }
+        return array( 'result' => $average );
+    }
 }
 
 eZSurveyQuestion::registerQuestionType( ezpI18n::tr( 'survey', 'Number Entry' ), 'NumberEntry' );

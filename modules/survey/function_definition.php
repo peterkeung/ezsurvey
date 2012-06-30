@@ -165,4 +165,16 @@ $FunctionList['already_posted'] = array( 'name' => 'already_posted',
                                                                        'type' => 'integer',
                                                                        'required' => false,
                                                                        'default' => false ) ) );
+
+$FunctionList['number_entry_average'] = array( 'name' => 'number_entry_average',
+                                         'call_method' => array( 'include_file' => 'extension/ezsurvey/modules/survey/classes/ezsurveynumberentry.php',
+                                                                 'class' => 'eZSurveyNumberEntry',
+                                                                 'method' => 'fetchAverage' ),
+                                         'parameter_type' => 'standard',
+                                         'parameters' => array( array( 'name' => 'original_question_id',
+                                                                       'type' => 'integer',
+                                                                       'required' => true ),
+                                                                array( 'name' => 'round',
+                                                                       'type' => 'mixed',
+                                                                       'default' => false ) ) );
 ?>
